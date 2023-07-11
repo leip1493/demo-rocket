@@ -2,7 +2,9 @@
 extern crate rocket;
 
 use rocket_dyn_templates::{context, Template};
+
 mod profile_router;
+mod response_structs;
 
 #[get("/")]
 fn index() -> Template {
