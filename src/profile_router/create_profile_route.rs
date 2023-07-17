@@ -1,7 +1,9 @@
+use crate::{database, response_structs::SuccessResponse};
+use entity::profile;
+use rocket::serde::json::{json, Json, Value};
+use rocket::serde::{Deserialize, Serialize};
+use sea_orm::{ActiveModelTrait, ActiveValue::Set};
 use std::fmt;
-
-use crate::response_structs::SuccessResponse;
-use rocket::serde::{json::Json, Deserialize, Serialize};
 
 #[derive(Debug, Serialize)]
 struct Profile {
@@ -23,11 +25,18 @@ pub struct CreateProfileRequest {
 
 #[derive(Serialize)]
 pub struct CreateProfileResponse {
-    data: Profile,
+    profile: Profile,
 }
 
 #[post("/", format = "json", data = "<request>")]
-pub fn run(request: Json<CreateProfileRequest>) -> Json<SuccessResponse<CreateProfileResponse>> {
+pub async fn run(
+    request: Json<CreateProfileRequest>,
+) -> Result<Json<SuccessResponse<CreateProfileResponse>>, Value> {
+    let db = match database::connect_db().await {
+        Ok(connection) => connection,
+        Err(e) => return Err(json!({ "message": format!("[CONNECTING] {}", e.to_string())})),
+    };
+
     let profile = Profile {
         name: request.name.to_string(),
         email: request.email.to_string(),
@@ -36,10 +45,21 @@ pub fn run(request: Json<CreateProfileRequest>) -> Json<SuccessResponse<CreatePr
     println!("{:?}", profile);
     println!("{}", profile);
 
-    let response = CreateProfileResponse { data: profile };
+    let db_profile = profile::ActiveModel {
+        name: Set(profile.name.to_owned()),
+        email: Set(profile.email.to_owned()),
+        ..Default::default()
+    };
 
-    Json(SuccessResponse {
+    match db_profile.save(&db).await {
+        Ok(_) => (),
+        Err(e) => return Err(json!({ "message": format!("[SAVING] {}", e.to_string())})),
+    };
+
+    let response = CreateProfileResponse { profile: profile };
+
+    Ok(Json(SuccessResponse {
         data: response,
         code: 200,
-    })
+    }))
 }
