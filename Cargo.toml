@@ -5,9 +5,15 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[workspace]
+members = [".", "migration", "entity"]
+
 [dependencies]
+entity = { path = "entity" }
+migration = { path = "migration" }
 rocket = { version = "=0.5.0-rc.3", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
+sea-orm = { version = "^0", features = [ "sqlx-postgres", "runtime-tokio-native-tls", "macros" ] }
 
 [dependencies.rocket_dyn_templates]
 version = "=0.1.0-rc.3"
