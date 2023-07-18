@@ -1,6 +1,8 @@
+use rocket::serde::{Deserialize, Serialize};
 use sea_orm::entity::prelude::*;
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
 #[sea_orm(table_name = "profile")]
 pub struct Model {
     #[sea_orm(primary_key)]

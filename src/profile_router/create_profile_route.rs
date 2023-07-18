@@ -1,8 +1,10 @@
-use crate::{database, response_structs::SuccessResponse};
+use crate::database::DB;
+use crate::response_structs::SuccessResponse;
 use entity::profile;
 use rocket::serde::json::{json, Json, Value};
 use rocket::serde::{Deserialize, Serialize};
 use sea_orm::{ActiveModelTrait, ActiveValue::Set};
+use sea_orm_rocket::Connection;
 use std::fmt;
 
 #[derive(Debug, Serialize)]
@@ -30,12 +32,10 @@ pub struct CreateProfileResponse {
 
 #[post("/", format = "json", data = "<request>")]
 pub async fn run(
+    connection: Connection<'_, DB>, // <- Recibe la instancia DB desde Rocket
     request: Json<CreateProfileRequest>,
 ) -> Result<Json<SuccessResponse<CreateProfileResponse>>, Value> {
-    let db = match database::connect_db().await {
-        Ok(connection) => connection,
-        Err(e) => return Err(json!({ "message": format!("[CONNECTING] {}", e.to_string())})),
-    };
+    let db = connection.into_inner();
 
     let profile = Profile {
         name: request.name.to_string(),
@@ -51,7 +51,7 @@ pub async fn run(
         ..Default::default()
     };
 
-    match db_profile.save(&db).await {
+    match db_profile.save(db).await {
         Ok(_) => (),
         Err(e) => return Err(json!({ "message": format!("[SAVING] {}", e.to_string())})),
     };

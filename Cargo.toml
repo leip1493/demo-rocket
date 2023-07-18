@@ -14,6 +14,8 @@ migration = { path = "migration" }
 rocket = { version = "=0.5.0-rc.3", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 sea-orm = { version = "0.11.3", features = [ "sqlx-postgres", "runtime-tokio-native-tls", "macros" ] }
+sea-orm-rocket = { version = "0.5.2" }
+async-trait = { version = "0.1" }
 
 [dependencies.rocket_dyn_templates]
 version = "=0.1.0-rc.3"

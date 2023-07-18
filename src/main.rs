@@ -4,9 +4,11 @@ use rocket::response::status::NotFound;
 use rocket::serde::json::{json, Json, Value};
 
 use rocket_dyn_templates::{context, Template};
+use sea_orm_rocket::Database;
 use serde::Serialize;
 
 mod database;
+use database::DB;
 mod profile_router;
 mod response_structs;
 
@@ -61,6 +63,7 @@ fn not_found() -> Value {
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
+        .attach(DB::init())
         .mount("/", routes![index, about, lorem])
         .register("/", catchers![not_found])
         .attach(profile_router::stage())

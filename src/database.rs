@@ -1,21 +1,52 @@
-use sea_orm::ConnectOptions;
-use sea_orm::Database;
-use sea_orm::DatabaseConnection;
-use sea_orm::DbErr;
+use sea_orm::{ConnectOptions, Database as SeaOrmDatabase, DatabaseConnection};
+use sea_orm_rocket::{rocket::figment::Figment, Config, Database};
 use std::time::Duration;
 
-pub async fn connect_db() -> Result<DatabaseConnection, DbErr> {
-    let mut opt =
-        ConnectOptions::new("postgres://personal:secret@localhost:5432/hello_rocket".to_string());
+#[derive(Database, Debug)]
+#[database("hello_rocket")]
+pub struct DB(SeaOrmPool);
 
-    opt.max_connections(100)
-        .min_connections(5)
-        .connect_timeout(Duration::from_secs(8))
-        .acquire_timeout(Duration::from_secs(8))
-        .idle_timeout(Duration::from_secs(8))
-        .max_lifetime(Duration::from_secs(8));
+#[derive(Debug, Clone)]
+pub struct SeaOrmPool {
+    pub connection: DatabaseConnection,
+}
 
-    let db = Database::connect(opt).await?;
+#[async_trait]
+impl sea_orm_rocket::Pool for SeaOrmPool {
+    type Error = sea_orm::DbErr;
 
-    Ok(db)
+    type Connection = sea_orm::DatabaseConnection;
+
+    async fn init(_figment: &Figment) -> Result<Self, Self::Error> {
+        // let config = figment.extract::<Config>().unwrap();
+        // let mut options: ConnectOptions = config.url.into();
+        // options
+        //     .max_connections(config.max_connections as u32)
+        //     .min_connections(config.min_connections.unwrap_or_default())
+        //     .connect_timeout(Duration::from_secs(config.connect_timeout))
+        //     .sqlx_logging(config.sqlx_logging);
+        // if let Some(idle_timeout) = config.idle_timeout {
+        //     options.idle_timeout(Duration::from_secs(idle_timeout));
+        // }
+        // let conn = sea_orm::Database::connect(options).await?;
+
+        let mut opt = ConnectOptions::new(
+            "postgres://personal:secret@localhost:5432/hello_rocket".to_string(),
+        );
+
+        opt.max_connections(100)
+            .min_connections(5)
+            .connect_timeout(Duration::from_secs(8))
+            .acquire_timeout(Duration::from_secs(8))
+            .idle_timeout(Duration::from_secs(8))
+            .max_lifetime(Duration::from_secs(8));
+
+        let connection: DatabaseConnection = SeaOrmDatabase::connect(opt).await?;
+
+        Ok(SeaOrmPool { connection })
+    }
+
+    fn borrow(&self) -> &Self::Connection {
+        &self.connection
+    }
 }
