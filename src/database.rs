@@ -1,5 +1,7 @@
+use dotenvy::dotenv;
 use sea_orm::{ConnectOptions, Database as SeaOrmDatabase, DatabaseConnection};
 use sea_orm_rocket::{rocket::figment::Figment, Config, Database};
+use std::env;
 use std::time::Duration;
 
 #[derive(Database, Debug)]
@@ -18,21 +20,11 @@ impl sea_orm_rocket::Pool for SeaOrmPool {
     type Connection = sea_orm::DatabaseConnection;
 
     async fn init(_figment: &Figment) -> Result<Self, Self::Error> {
-        // let config = figment.extract::<Config>().unwrap();
-        // let mut options: ConnectOptions = config.url.into();
-        // options
-        //     .max_connections(config.max_connections as u32)
-        //     .min_connections(config.min_connections.unwrap_or_default())
-        //     .connect_timeout(Duration::from_secs(config.connect_timeout))
-        //     .sqlx_logging(config.sqlx_logging);
-        // if let Some(idle_timeout) = config.idle_timeout {
-        //     options.idle_timeout(Duration::from_secs(idle_timeout));
-        // }
-        // let conn = sea_orm::Database::connect(options).await?;
+        dotenv().ok();
 
-        let mut opt = ConnectOptions::new(
-            "postgres://personal:secret@localhost:5432/hello_rocket".to_string(),
-        );
+        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL not found");
+
+        let mut opt = ConnectOptions::new(database_url);
 
         opt.max_connections(100)
             .min_connections(5)
