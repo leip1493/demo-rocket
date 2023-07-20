@@ -27,10 +27,6 @@ Asegúrate de no incluir información confidencial en el archivo `.env` y nunca 
 
 A continuación se muestran algunos comandos útiles de Cargo que puedes utilizar en este proyecto:
 
-## Comandos de Cargo
-
-A continuación se muestran algunos comandos útiles de Cargo que puedes utilizar en este proyecto:
-
 ```bash
 # Compila y ejecuta la aplicación en tu entorno local
 cargo run
