@@ -593,6 +593,13 @@ dependencies = [
 name = "demo-rocket"
 version = "0.1.0"
 dependencies = [
+ "demo-rocket-api",
+]
+
+[[package]]
+name = "demo-rocket-api"
+version = "0.1.0"
+dependencies = [
  "async-trait",
  "dotenvy",
  "entity",

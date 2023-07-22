@@ -1,6 +1,6 @@
 use dotenvy::dotenv;
 use sea_orm::{ConnectOptions, Database as SeaOrmDatabase, DatabaseConnection};
-use sea_orm_rocket::{rocket::figment::Figment, Config, Database};
+use sea_orm_rocket::{rocket::figment::Figment, Database};
 use std::env;
 use std::time::Duration;
 

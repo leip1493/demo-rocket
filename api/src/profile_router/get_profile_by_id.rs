@@ -5,7 +5,7 @@ use rocket::serde::json::{json, Value};
 use sea_orm::EntityTrait;
 use sea_orm_rocket::Connection;
 
-#[get("/<id>")]
+#[get("/<id>", format = "json")]
 pub async fn run(connection: Connection<'_, DB>, id: i32) -> (Status, Value) {
     let db = connection.into_inner();
 
