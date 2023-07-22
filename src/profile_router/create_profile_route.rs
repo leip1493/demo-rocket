@@ -5,18 +5,11 @@ use rocket::serde::json::{json, Json, Value};
 use rocket::serde::{Deserialize, Serialize};
 use sea_orm::{ActiveModelTrait, ActiveValue::Set};
 use sea_orm_rocket::Connection;
-use std::fmt;
 
 #[derive(Debug, Serialize)]
 struct Profile {
     name: String,
     email: String,
-}
-
-impl fmt::Display for Profile {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "El correo de: {} es {}", self.name, self.email)
-    }
 }
 
 #[derive(Deserialize)]
@@ -41,9 +34,6 @@ pub async fn run(
         name: request.name.to_string(),
         email: request.email.to_string(),
     };
-
-    println!("{:?}", profile);
-    println!("{}", profile);
 
     let db_profile = profile::ActiveModel {
         name: Set(profile.name.to_owned()),
