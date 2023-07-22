@@ -4,15 +4,21 @@ Este repositorio contiene una aplicación de demostración escrita en Rust utili
 
 ## Requisitos
 
-Asegúrate de tener instalado Rust y Cargo en tu sistema antes de ejecutar esta aplicación.
+Antes de ejecutar esta aplicación, asegúrate de cumplir con los siguientes requisitos:
 
+- **Rust y Cargo**: Verifica si tienes Rust instalado ejecutando `rustc --version`. Si no lo tienes, puedes obtenerlo desde [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install).
+- **PostgreSQL**: Esta aplicación requiere PostgreSQL como base de datos. Asegúrate de tenerlo instalado y configurado en tu sistema.
+- **sea-orm-cli**: Esta aplicación utiliza sea-orm-cli para facilitar la interacción con la base de datos y la generación de código ORM. Asegúrate de tener sea-orm-cli instalado en tu sistema antes de ejecutar esta aplicación. `cargo install sea-orm-cli`
+
+   
 ## Instalación
 
 Sigue estos pasos para ejecutar la aplicación en tu entorno local:
 
 1. Clona este repositorio: `git clone https://github.com/tu-usuario/demo-rocket.git`
 2. Navega al directorio del repositorio: `cd demo-rocket`
-3. Ejecuta la aplicación con Cargo: `cargo run`
+3. Ejecuta las migraciones con el comando `sea-orm-cli migrate up`
+4. Ejecuta la aplicación con Cargo: `cargo run`
 
 ## Configuración del entorno
 
