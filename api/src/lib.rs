@@ -11,7 +11,7 @@ use serde::Serialize;
 
 mod database;
 use database::DB;
-use views::index;
+
 mod profile_router;
 mod response_structs;
 mod views;
@@ -19,31 +19,6 @@ mod views;
 #[derive(Serialize)]
 struct Resp {
     lorem: String,
-}
-
-#[get("/about", format = "json")]
-async fn about() -> Result<Json<Resp>, NotFound<String>> {
-    // let db = connect_db().await?;
-    let message = "ipsums";
-
-    if message.ne("ipsum") {
-        return Err(NotFound("message invalid".to_string()));
-    }
-
-    Ok(Json(Resp {
-        lorem: message.to_string(),
-    }))
-}
-
-#[get("/lorem", format = "json")]
-async fn lorem() -> Option<Value> {
-    let message = "ipsums";
-
-    if message.ne("ipsum") {
-        return None;
-    }
-
-    Some(json!({ "message": message}))
 }
 
 #[catch(404)]
@@ -68,10 +43,10 @@ async fn start() -> Result<(), rocket::Error> {
 
     rocket::custom(figment)
         .attach(DB::init())
-        .mount("/", routes![about, lorem, index])
-        .register("/", catchers![not_found])
+        .attach(views::stage())
         .attach(profile_router::stage())
-        .attach(Template::fairing())
+        .attach(Template::fairing())        
+        .register("/", catchers![not_found])
         .launch()
         .await
         .map(|_| ())

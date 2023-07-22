@@ -1,11 +1,7 @@
-use rocket_dyn_templates::{context, Template};
+mod hello_rocket_view;
 
-#[get("/")]
-pub fn index() -> Template {
-    Template::render(
-        "index",
-        context! {
-            title: "Rocket demo"
-        },
-    )
+pub fn stage() -> rocket::fairing::AdHoc {
+    rocket::fairing::AdHoc::on_ignite("VIEWS", |rocket| async {
+        rocket.mount("/", routes![hello_rocket_view::index])
+    })
 }
