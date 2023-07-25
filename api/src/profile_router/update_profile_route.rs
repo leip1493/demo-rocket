@@ -2,17 +2,23 @@ use crate::database::DB;
 use entity::profile;
 use rocket::http::Status;
 use rocket::serde::json::{json, Json, Value};
+
+use rocket_okapi::okapi::schemars;
+use rocket_okapi::okapi::schemars::JsonSchema;
+use rocket_okapi::openapi;
+
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, EntityTrait, TryIntoModel};
 use sea_orm_rocket::Connection;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, JsonSchema)]
 pub struct UpdateProfileRequest {
     name: String,
     email: String,
 }
 
+#[openapi(tag = "Profiles")]
 #[put("/<id>", format = "json", data = "<request>")]
 pub async fn run(
     connection: Connection<'_, DB>,
