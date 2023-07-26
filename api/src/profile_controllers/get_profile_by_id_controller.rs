@@ -2,10 +2,12 @@ use crate::database::DB;
 use entity::profile;
 use rocket::http::Status;
 use rocket::serde::json::{json, Value};
-use sea_orm::{EntityTrait, ModelTrait};
+use rocket_okapi::openapi;
+use sea_orm::EntityTrait;
 use sea_orm_rocket::Connection;
 
-#[delete("/<id>", format = "json")]
+#[openapi(tag = "Profiles")]
+#[get("/<id>", format = "json")]
 pub async fn run(connection: Connection<'_, DB>, id: i32) -> (Status, Value) {
     let db = connection.into_inner();
 
@@ -19,23 +21,10 @@ pub async fn run(connection: Connection<'_, DB>, id: i32) -> (Status, Value) {
 
     let option_db_profile = result_db_profile.unwrap();
     if let None = option_db_profile {
-        return (
-            Status::NotFound,
-            json!({ "error": format!("Profile with id {} not found", id) }),
-        );
+        return (Status::NotFound, json!({ "profile": () }));
     }
 
     let db_profile = option_db_profile.unwrap();
 
-    if let Err(error) = db_profile.delete(db).await {
-        return (
-            Status::InternalServerError,
-            json!({ "error": error.to_string() }),
-        );
-    }
-
-    return (
-        Status::Ok,
-        json!({ "message": format!("Profile with id {} deleted", id)}),
-    );
+    return (Status::Ok, json!({ "profile": db_profile}));
 }

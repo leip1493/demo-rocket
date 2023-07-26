@@ -20,6 +20,21 @@ Sigue estos pasos para ejecutar la aplicación en tu entorno local:
 3. Ejecuta las migraciones con el comando `sea-orm-cli migrate up`
 4. Ejecuta la aplicación con Cargo: `cargo run`
 
+## Acceso a la Documentación
+
+Puedes acceder a la documentación de la API a través de los siguientes enlaces:
+
+- Swagger UI: [http://localhost:{PUERTO}/swagger/](http://localhost:{PUERTO}/swagger/)
+- RapiDoc: [http://localhost:{PUERTO}/rapidoc/](http://localhost:{PUERTO}/rapidoc/)
+
+Asegúrate de reemplazar `{PUERTO}` con el número de puerto específico en el que tu aplicación está sirviendo la documentación. Por ejemplo, si estás ejecutando tu aplicación en el puerto 3000, los enlaces serían:
+
+- Swagger UI: [http://localhost:3000/swagger/](http://localhost:3000/swagger/)
+![Swagger UI](api/static/images/swagger-ui.PNG)
+- RapiDoc: [http://localhost:3000/rapidoc/](http://localhost:3000/rapidoc/)
+![RapiDoc UI](api/static/images/rapidoc-ui.PNG)
+
+
 ## Configuración del entorno
 
 Antes de ejecutar la aplicación, asegúrate de configurar el archivo de entorno. Este repositorio incluye un archivo `.env.example` que puedes utilizar como base. Sigue estos pasos para configurar el archivo `.env`:
@@ -48,19 +63,6 @@ cargo doc
 ```
 
 Recuerda ejecutar estos comandos en tu terminal o línea de comandos en un entorno que tenga Rust y Cargo correctamente instalados. Asegúrate de navegar al directorio del repositorio antes de ejecutar los comandos.
-## Dependencias
-
-Esta aplicación depende de las siguientes bibliotecas y versiones:
-
-- entity 0.1.0
-- migration 0.1.0
-- rocket 0.5.0-rc.3 (con la característica "json")
-- serde 1.0 (con la característica "derive")
-- sea-orm 0.11.3 (con las características "sqlx-postgres", "runtime-tokio-native-tls" y "macros")
-- sea-orm-rocket 0.5.2
-- async-trait 0.1
-- dotenvy 0.15.7
-- rocket_dyn_templates 0.1.0-rc.3 (con la característica "handlebars")
 
 ## Licencia
 
