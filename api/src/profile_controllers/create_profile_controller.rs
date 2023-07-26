@@ -1,7 +1,7 @@
 use crate::database::DB;
 use entity::profile;
 use rocket::http::Status;
-use rocket::serde::json::{Json};
+use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 use sea_orm::{ActiveModelTrait, ActiveValue::Set};
 use sea_orm_rocket::Connection;
