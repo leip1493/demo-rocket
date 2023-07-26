@@ -1,6 +1,6 @@
 use rocket_okapi::okapi::openapi3::OpenApi;
 
-pub fn run() -> OpenApi {
+pub fn run(port: &i32) -> OpenApi {
     use rocket_okapi::okapi::openapi3::*;
     OpenApi {
         openapi: OpenApi::default_version(),
@@ -24,7 +24,7 @@ pub fn run() -> OpenApi {
         },
         servers: vec![
             Server {
-                url: "http://127.0.0.1:8000/".to_owned(),
+                url: format!("http://127.0.0.1:{port}/"),
                 description: Some("Localhost".to_owned()),
                 ..Default::default()
             },

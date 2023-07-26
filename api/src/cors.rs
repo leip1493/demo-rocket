@@ -4,9 +4,11 @@ use rocket_cors::AllowedHeaders;
 use rocket_cors::AllowedOrigins;
 use rocket_cors::Cors;
 
-pub fn run() -> Cors {
-    let allowed_origins =
-        AllowedOrigins::some_exact(&["http://localhost:8000", "http://127.0.0.1:8000"]);
+pub fn run(port: &i32) -> Cors {
+    let allowed_origins = AllowedOrigins::some_exact(&[
+        format!("http://localhost:{port}"),
+        format!("http://127.0.0.1:{port}"),
+    ]);
 
     rocket_cors::CorsOptions {
         allowed_origins,

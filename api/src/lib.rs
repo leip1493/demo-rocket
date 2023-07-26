@@ -86,10 +86,10 @@ async fn start() -> Result<(), rocket::Error> {
             }),
         )
         .register("/", catchers![not_found])
-        .attach(cors::run());
+        .attach(cors::run(&port));
 
     let openapi_settings = OpenApiSettings::default();
-    let custom_route_spec = (vec![], openapi_spec::run());
+    let custom_route_spec = (vec![], openapi_spec::run(&port));
 
     mount_endpoints_and_merged_docs! {
         building_rocket, "/".to_owned(), openapi_settings,
