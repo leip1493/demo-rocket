@@ -1,0 +1,14 @@
+services:
+  database:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+    ports:
+      - "${DATABASE_PORT}:5432"
+    volumes:
+      - demo-rocket:/var/lib/postgresql/data
+
+volumes:
+  demo-rocket:

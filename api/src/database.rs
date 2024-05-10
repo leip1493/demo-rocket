@@ -22,7 +22,12 @@ impl sea_orm_rocket::Pool for SeaOrmPool {
     async fn init(_figment: &Figment) -> Result<Self, Self::Error> {
         dotenv().ok();
 
-        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL not found");
+        let database_name = env::var("DATABASE_NAME").expect("DATABASE_NAME not found");
+        let database_user = env::var("DATABASE_USER").expect("DATABASE_USER not found");
+        let database_password = env::var("DATABASE_PASS").expect("DATABASE_PASS not found");
+        let database_host = env::var("DATABASE_HOST").expect("DATABASE_HOST not found");
+        let database_port = env::var("DATABASE_PORT").expect("DATABASE_PORT not found");
+        let database_url = format!("postgres://{database_user}:{database_password}@{database_host}:{database_port}/{database_name}");
 
         let mut opt = ConnectOptions::new(database_url);
 
